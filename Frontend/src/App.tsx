@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import './App.css'
+import Topbar from './components/topbar'
 
 function App() {
 
+
   return (
     <>
-    <h1 className='text-2xl font-bold'>Hello, Free Media Stock!</h1>
+     <main className='w-full px-10'>
+      <Topbar />
+     </main>
     </>
   )
 }
