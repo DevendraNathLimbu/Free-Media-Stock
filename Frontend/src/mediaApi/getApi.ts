@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { ApiResponse } from "../App.tsx";
+import type { ApiGifResponse } from "../App.tsx";
 
 type queryParams = {
     query: string;
@@ -31,3 +32,27 @@ return data;
     throw error;
    }
 }
+
+type gifQueryParams = {
+    query: string;
+    limit: number;
+}
+
+export const getGifApi: (params: gifQueryParams) => Promise<ApiGifResponse> = async ({query, limit}) => {
+    const TENOR_API_KEY = import.meta.env.VITE_TENOR_API_KEY;
+    const TENOR_BASE_URL = "https://tenor.googleapis.com/v2/search";
+    try {
+        const response = await axios.get(TENOR_BASE_URL, {
+            params: {
+                q: query,
+                key: TENOR_API_KEY,
+                limit: limit
+            }
+        });
+        const data: ApiGifResponse = response.data;
+        return data;
+    } catch (error) {
+        console.error("Error fetching GIFs:", error);
+        throw error;
+    }
+};

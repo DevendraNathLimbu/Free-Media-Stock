@@ -42,8 +42,11 @@ const searchSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    setEmptyResults(state, action: PayloadAction<Item[]>) {
+      state.results = action.payload;
+    }
   },
 });
 
-export const { setQuery, setActiveTab, setResults, setLoading, setError } = searchSlice.actions;
+export const { setQuery, setActiveTab, setResults, setLoading, setError, setEmptyResults } = searchSlice.actions;
 export default searchSlice.reducer;
