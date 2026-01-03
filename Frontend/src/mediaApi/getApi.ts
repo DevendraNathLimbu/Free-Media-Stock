@@ -3,17 +3,19 @@ import type { ApiResponse } from "../App.tsx";
 
 type queryParams = {
     query: string;
+    page: number;
     per_page: number;
 }
 
 const API_KEY = import.meta.env.VITE_UNSPLASH_API_KEY;
 const BASE_URL = "https://api.unsplash.com/";
 
-export const getMediaApi: (params: queryParams) => Promise<ApiResponse> = async ({ query, per_page }) => {
+export const getMediaApi: (params: queryParams) => Promise<ApiResponse> = async ({ query, page, per_page }) => {
     try{
         const response = await axios.get(`${BASE_URL}/search/photos`, {
         params: {
             query,
+            page,
             per_page
     },
     headers: {

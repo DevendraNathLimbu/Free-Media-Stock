@@ -5,6 +5,7 @@ import Card from './components/card'
 import { getMediaApi } from './mediaApi/getApi'
 import { setResults } from './app/features/searchSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch } from './app/hooks'
 
   type ApiItem = {
     id: string;
@@ -28,12 +29,16 @@ export type ApiResponse = {
 
 function App() {
 
-  const dispatch = useDispatch();
-  const results = useSelector((state: { search: { results: Item[] } }) => state.search.results);
+  const query = useSelector((state: { search: { query: string } }) => state.search.query);
+  const searchData = query;
 
-    const fetchData: () => Promise<Item[]> = async () => {
+  const randomPage = Math.floor(Math.random() * 20) + 1;
+
+  const dispatch = useAppDispatch();
+  const results = useSelector((state: { search: { results: Item[] } }) => state.search.results);
+     const fetchData: () => Promise<Item[]> = async  () => {
       try {
-        const res: ApiResponse = await getMediaApi({ query: 'nature', per_page: 9 });
+        const res: ApiResponse = await getMediaApi({ query: searchData, page: randomPage, per_page: 9 });
         const data = res.results.map(
           (item: ApiItem) => ({ 
             id: item.id,
@@ -56,7 +61,9 @@ function App() {
   useEffect(() => {
     console.log('Fetching data from Unsplash API...');
     fetchData();
-  }, [dispatch]);
+
+    dispatch(setResults([])); // Clear previous results when query changes
+  }, [query]);
 
   return (
     <>

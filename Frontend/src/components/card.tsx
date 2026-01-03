@@ -1,6 +1,8 @@
 import React from 'react'
 import { HiDownload } from "react-icons/hi";
 import { FaHeart } from "react-icons/fa";
+import { Router as ReactRouterDOM, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Card = (props) => {
   return (
