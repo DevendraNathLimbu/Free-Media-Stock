@@ -35,7 +35,9 @@ const Topbar = () => {
            <button className='px-2 py-1 text-3xl cursor-pointer rounded'>🔎</button>
          </form>
           <button className='text-xl font-semibold text-white rounded px-2 py-1 bg-gray-800 cursor-pointer hover:scale-101'>
-            <Link to='/login'>LogIn</Link>
+            {
+              <Link to='/login'>LogIn</Link>
+            }
           </button>
         </div>
         <div className="bottom flex justify-between items-center py-2 bx-2">
