@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import React, { use, useState } from 'react';
 import { setQuery } from '../app/features/searchSlice.ts';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom'
 
 const Topbar = () => {
   const [search, setSearch] = useState<string>('');
@@ -33,7 +34,9 @@ const Topbar = () => {
            <input onChange={(e) => setSearch(e.target.value)} value={search} className="search-input text-2xl rounded bg-white px-2 shadow-2xl inset-shadow-2xl text-gray-600 py-1 border-2 border-gray-300 outline-none" type="text" placeholder='search media...'/>
            <button className='px-2 py-1 text-3xl cursor-pointer rounded'>🔎</button>
          </form>
-          <button className='text-xl font-semibold text-white rounded px-2 py-1 bg-gray-800 cursor-pointer hover:scale-101'>LogIn</button>
+          <button className='text-xl font-semibold text-white rounded px-2 py-1 bg-gray-800 cursor-pointer hover:scale-101'>
+            <Link to='/login'>LogIn</Link>
+          </button>
         </div>
         <div className="bottom flex justify-between items-center py-2 bx-2">
           <div className="media  flex justify-center gap-8 py-2">

@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { ApiResponse } from "../App.tsx";
-import type { ApiGifResponse } from "../App.tsx";
+import type { ApiResponse } from "../components/home.tsx";
+import type { ApiGifResponse } from "../components/home.tsx";
 
 type queryParams = {
     query: string;

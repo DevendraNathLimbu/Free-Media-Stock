@@ -11,14 +11,16 @@ interface SearchState {
   results: Item[];
   loading: boolean;
   error: string | null;
+  collectedUrl: string;
 }
 
 const initialState: SearchState = {
   query: '',
   activeTab: 'Images',
   results: [],
-  loading: false,
+  loading: true,
   error: null,
+  collectedUrl: ''
 };
 
 const searchSlice = createSlice({
@@ -44,9 +46,12 @@ const searchSlice = createSlice({
     },
     setEmptyResults(state, action: PayloadAction<Item[]>) {
       state.results = action.payload;
+    },
+    setCollectedUrl(state, action: PayloadAction<string>){
+      state.collectedUrl = action.payload;
     }
   },
 });
 
-export const { setQuery, setActiveTab, setResults, setLoading, setError, setEmptyResults } = searchSlice.actions;
+export const { setQuery, setActiveTab, setResults, setLoading, setError, setEmptyResults, setCollectedUrl } = searchSlice.actions;
 export default searchSlice.reducer;
