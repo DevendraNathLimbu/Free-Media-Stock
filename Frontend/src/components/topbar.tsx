@@ -1,7 +1,7 @@
-import { setActiveTab, type MediaType } from '../app/features/searchSlice.ts';
+import { setActiveTab, setCurrUser, type MediaType } from '../app/features/searchSlice.ts';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import React, { use, useState } from 'react';
-import { setQuery } from '../app/features/searchSlice.ts';
+import { setImgQuery, setGifQuery } from '../app/features/searchSlice.ts';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom'
 
@@ -10,20 +10,18 @@ const Topbar = () => {
   const mediaTypes: MediaType[] = ['Images', 'Videos', 'GIFs'];
   const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.search.activeTab);
-
-  const query = useAppSelector((state) => state.search.query);
+  const currUser = useAppSelector((state) => state.search.currUser);
 
   const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(setQuery(search));
+    if(activeTab == "Images"){
+      dispatch(setImgQuery(search));
+    }
+    else if(activeTab == "GIFs"){
+      dispatch(setGifQuery(search));
+    }
     setSearch('');
   };
-
-  useEffect(() => {
-    if(query) {
-      console.log('New query to search:', query);
-    }
-  }, [query])
 
   return (
     <>
@@ -36,14 +34,16 @@ const Topbar = () => {
          </form>
           <button className='text-xl font-semibold text-white rounded px-2 py-1 bg-gray-800 cursor-pointer hover:scale-101'>
             {
-              <Link to='/login'>LogIn</Link>
+             currUser && 'username' in currUser ? <p onClick={() => dispatch(setCurrUser({}))}>LogOut</p> :  <Link to='/login'>LogIn</Link>
             }
           </button>
         </div>
         <div className="bottom flex justify-between items-center py-2 bx-2">
           <div className="media  flex justify-center gap-8 py-2">
             {mediaTypes.map((type) => (
-            <button onClick={() => dispatch(setActiveTab(type))} className={`${activeTab === type ? 'bg-gray-900' : 'bg-gray-600'} text-2xl text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900`} key={type}>{type}</button>
+            <button onClick={() => dispatch(setActiveTab(type))} className={`${activeTab === type ? 'bg-gray-900' : 'bg-gray-600'} text-2xl text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900`} key={type}>
+             <Link to={`/${type}`}>{type}</Link>
+            </button>
           ))}
           </div>
           <button className='text-2xl bg-gray-600 text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900'>Collections</button>

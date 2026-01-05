@@ -77,16 +77,17 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
     const user = await User.findOne({ username });
-    if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
-    }
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    const token = generateToken(user);
+    const isVerified = verifyToken(token);
+
+    if (!user | !isMatch | !isVerified) {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
-    const token = generateToken(user);
-    verifyToken(token);
-    return res.status(200).json({ message: 'Login successful', token });
+    const currUser = user._id;
+    console.log(currUser);
+
+    return res.status(200).json({ message: 'Login successful', token, currUser: {username: user.username, _id: user._id} });
 } catch (error) {
     return res.status(500).json({ message: 'Server error' });
 }

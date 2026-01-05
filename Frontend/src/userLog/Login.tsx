@@ -3,17 +3,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import {api} from '../apiCall';
+import { useAppDispatch as UseDispatch, useAppSelector as useSelector } from '../app/hooks';
+import { setCurrUser } from '../app/features/searchSlice.ts';
 
 const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
     const navigate = useNavigate();
+    const dispatch = UseDispatch();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-          await api.post('/login', {username, password});
+         const res = await api.post('/login', {username, password});
+         dispatch(setCurrUser(res.data.currUser));
           console.log("Login successful");
           navigate('/');
         }

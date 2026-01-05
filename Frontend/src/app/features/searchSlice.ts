@@ -6,21 +6,25 @@ import type { Item } from '../App'
 export type MediaType = 'Images' | 'Videos' | 'GIFs';
 
 interface SearchState {
-  query: string;
+  imgQuery: string;
+  gifQuery: string;
   activeTab: MediaType;
   results: Item[];
   loading: boolean;
   error: string | null;
   collectedUrl: string;
+  currUser: object;
 }
 
 const initialState: SearchState = {
-  query: '',
+  imgQuery: '',
+  gifQuery: '',
   activeTab: 'Images',
   results: [],
   loading: true,
   error: null,
-  collectedUrl: ''
+  collectedUrl: '',
+  currUser: {},
 };
 
 const searchSlice = createSlice({
@@ -49,9 +53,18 @@ const searchSlice = createSlice({
     },
     setCollectedUrl(state, action: PayloadAction<string>){
       state.collectedUrl = action.payload;
+    },
+    setCurrUser(state, action: PayloadAction<object>){
+      state.currUser = action.payload;
+    },
+    setImgQuery(state, action: PayloadAction<string>){
+      state.imgQuery = action.payload;
+    },
+    setGifQuery(state, action: PayloadAction<string>){
+      state.gifQuery = action.payload;
     }
   },
 });
 
-export const { setQuery, setActiveTab, setResults, setLoading, setError, setEmptyResults, setCollectedUrl } = searchSlice.actions;
+export const { setQuery, setActiveTab, setResults, setLoading, setError, setEmptyResults, setCollectedUrl, setCurrUser, setImgQuery, setGifQuery } = searchSlice.actions;
 export default searchSlice.reducer;
