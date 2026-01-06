@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 import {Outlet} from 'react-router-dom'
 import type { Item, ApiGifResponse, ApiGifItem } from '../home'
 import Card from '../card'
-import { collect } from '../../Authorization/Collect'
 
 const GifData = () => {
     

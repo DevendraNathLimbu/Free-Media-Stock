@@ -3,7 +3,15 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Item } from '../App'
 
 
-export type MediaType = 'Images' | 'Videos' | 'GIFs';
+export type MediaType = 'Images' | 'Videos' | 'GIFs' | 'collection';
+
+export type currUserType = {
+  urls: [string];
+  _id: string;
+  username: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 interface SearchState {
   imgQuery: string;
@@ -14,7 +22,7 @@ interface SearchState {
   loading: boolean;
   error: string | null;
   collectedUrl: string;
-  currUser: object;
+  currUser: currUserType;
   gifValue: string;
   imgValue: string;
 }
@@ -28,7 +36,7 @@ const initialState: SearchState = {
   loading: false,
   error: null,
   collectedUrl: '',
-  currUser: {},
+  currUser: { urls: [''], _id: '', username: '', createdAt: '', updatedAt: '' },
   gifValue: 'abc',
   imgValue: 'abc'
 };
@@ -63,7 +71,7 @@ const searchSlice = createSlice({
     setCollectedUrl(state, action: PayloadAction<string>){
       state.collectedUrl = action.payload;
     },
-    setCurrUser(state, action: PayloadAction<object>){
+    setCurrUser(state, action: PayloadAction<currUserType>){
       state.currUser = action.payload;
     },
     setImgQuery(state, action: PayloadAction<string>){

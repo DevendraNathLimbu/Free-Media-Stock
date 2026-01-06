@@ -9,7 +9,7 @@ const View = () => {
 
   const collectedUrl = useSelector((state: {search: {collectedUrl: string}}) => state.search.collectedUrl);
   
-  const activeTab = useSelector((state: {search: {activeTab: string}}) => state.search.activeTab);
+  const currUser = useSelector((state: {search: {currUser: {url: string, id: string}}}) => state.search.currUser);
 
   useEffect(() => {
     console.log("Collected URL in View component:", collectedUrl);
@@ -17,7 +17,7 @@ const View = () => {
 
   return (
     <>
-    <div className='view fixed top-0 left-0 h-screen w-full flex justify-center items-center z-100'>
+    <div onClick={() => console.log(currUser)} className='view fixed top-0 left-0 h-screen w-full flex justify-center items-center z-100'>
       <Link to="/">
       <RxCrossCircled className='absolute top-5 right-5 text-red-400 text-5xl cursor-pointer hover:scale-102' size={50} onClick={() => setCollectedUrl('')}/>
       </Link>

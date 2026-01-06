@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { protector } from './src/middleware/auth.protector.js';
 import Cart from './src/models/cart.model.js';
+import { generateToken, verifyToken } from './src/utils/tokenManager.js';
 
 dotenv.config();
 
@@ -38,24 +39,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-const SECRET_KEY = process.env.SECRET_KEY;
-
-const generateToken = (user) => {
-    const payload = {
-        username: user.username,
-        password: user.password
-    }
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-}
-
-const verifyToken = (token) => {
-    try {
-        return jwt.verify(token, SECRET_KEY);
-    } catch (error) {
-        return null;
-    }
-}
-
 app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -86,6 +69,7 @@ app.post('/login', async (req, res) => {
     if (!user | !isMatch | !isVerified) {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
+    req.currUser = await User.findOne({ username }).select('-password');
 
     return res.status(200).json({ message: 'Login successful', token, currUser: req.currUser });
 } catch (error) {
@@ -93,22 +77,34 @@ app.post('/login', async (req, res) => {
 }
 });
 
-app.get('/collected', protector, async (req, res) => {
+app.post('/collected', async (req, res) => {
     const {url, id} = req.body;
     try {
+        if (!url || !id) {
+            console.log(`no url and id, url: ${url}, id: ${id}`);
+      return res.status(400).json({ message: "url or user id missing" });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+        console.log("user not found");
+      return res.status(404).json({ message: "User not found" });
+    }
         const cart = new Cart({ userId: id, url: url });
-        cart.save();
-        const user = await User.findById(id);
+        await cart.save();
+
         user.urls.push(cart._id);
         await user.save();
-        return res.status(200).json({ message: 'URL added to collection', cart });
+        console.log(cart);
+        return res.status(200).json({ message: 'URL added to collection', cart: cart });
     }
     catch (error) {
+        console.log("error");
         return res.status(500).json({ message: 'Server error' });
     }
 });
 
-app.get('/uncollected', protector, async (req, res) => {
+app.post('/uncollected', protector, async (req, res) => {
     const {url, id} = req.body;
     try {
         const cart = await Cart.findOneAndDelete({ userId: id, url: url });
@@ -116,6 +112,16 @@ app.get('/uncollected', protector, async (req, res) => {
         user.urls.pull(cart._id);
         await user.save();
         return res.status(200).json({ message: 'URL removed from collection', cart });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+app.get('/collections', protector, async (req, res) => {
+    try {
+        const carts = await Cart.find({ userId: req.currUser._id });
+        return res.status(200).json({ carts });
     }
     catch (error) {
         return res.status(500).json({ message: 'Server error' });

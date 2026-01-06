@@ -4,6 +4,10 @@ import Topbar from './topbar'
 import { useSelector } from 'react-redux'
 import ImgData from './Data/imgData'
 import GifData from './Data/gifData'
+import { useEffect } from 'react'
+import { useAppDispatch as UseDispatch} from '../app/hooks'
+import { setCurrUser } from '../app/features/searchSlice'
+import Collections from './collections'
 
 export type ApiItem = {
     id: string;
@@ -54,6 +58,7 @@ const Home = () => {
   // const results = useSelector((state: { search: { results: Item[] } }) => state.search.results);
   // const loading = useSelector((state: { search: { loading: boolean } }) => state.search.loading);
   const activeTab = useSelector((state: { search: { activeTab: string } }) => state.search.activeTab);   
+  const currUser = useSelector((state: {search: {currUser: {url: string, id: string}}}) => state.search.currUser);
   // const fetchImgData: () => Promise<Item[]> = async  () => {
   //       try {
   //       dispatch(setLoading(true));
@@ -122,6 +127,10 @@ const Home = () => {
   //   console.log(url);
   //   dispatch(setCollectedUrl(url));
   // }
+  const dispatch = UseDispatch();
+  useEffect(() => {
+        dispatch(setCurrUser(JSON.parse(localStorage.getItem('currUser') || '{}')));
+  }, []);
 
   return (
     <>

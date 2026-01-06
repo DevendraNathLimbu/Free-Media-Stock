@@ -4,14 +4,26 @@ import React, { useState } from 'react';
 import { setImgQuery, setGifQuery } from '../app/features/searchSlice.ts';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import {api} from '../apiCall'
+import Collections from './collections'
+
+// type cart = {
+//   userId: string,
+//    url: string,
+//   _id: string
+// }
 
 const Topbar = () => {
+const [collections, setCollections] = useState<Array<{url: string, _id: string,
+       userId: string}>>([]);
+
   const [search, setSearch] = useState<string>('');
-  const mediaTypes: MediaType[] = ['Images', 'Videos', 'GIFs'];
+  const mediaTypes: MediaType[] = ['Images', 'Videos', 'GIFs', 'collection'];
   const dispatch = useAppDispatch();
   const activeTab = useAppSelector((state) => state.search.activeTab);
   const currUser = useAppSelector((state) => state.search.currUser);
   const navigate = useNavigate();
+
   const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('clicked');
@@ -24,9 +36,21 @@ const Topbar = () => {
     setSearch('');
   };
 
+  const fetchCollections = async () => {
+    try {
+      dispatch(setActiveTab("collection"));
+      const res = await api.get('/collections');
+      setCollections(res.data.carts);
+      console.log('Fetched collections:', res.data);
+    } catch (error) {
+      console.error('Error fetching collections:', error);
+    }
+  }
+
   const logOut = () => {
-    dispatch(setCurrUser({}));
+    dispatch(setCurrUser({urls: [''], _id: '', username: '', createdAt: '', updatedAt: ''}));
     localStorage.removeItem('token');
+    localStorage.removeItem('currUser');
     navigate('/login');
   }
 
@@ -51,9 +75,10 @@ const Topbar = () => {
             <button onClick={() => dispatch(setActiveTab(type))} className={`${activeTab === type ? 'bg-gray-900' : 'bg-gray-600'} text-2xl text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900`} key={type}>{type}</button>
           ))}
           </div>
-          <button className='text-2xl bg-gray-600 text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900'>Collections</button>
+          <button onClick={fetchCollections} className='text-2xl bg-gray-600 text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900'>Collections</button>
         </div>
       </div>
+      <Collections results={collections} />
     </>
   )
 }
