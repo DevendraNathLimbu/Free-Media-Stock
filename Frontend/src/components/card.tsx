@@ -3,8 +3,12 @@ import { HiDownload } from "react-icons/hi";
 import { FaHeart } from "react-icons/fa";
 import { Router as ReactRouterDOM, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { collectUrl } from '../Authorization/Collect';
+import { setCurrUser } from '../app/features/searchSlice';
+import { useAppSelector as useSelector } from '../app/hooks';
 
 const Card = (props) => {
+  const currUser = useSelector((state) => state.search.currUser);
   return (
     <>
     {/* <div className="card bg-base-100 w-96 shadow-sm"> */}
@@ -14,8 +18,8 @@ const Card = (props) => {
       alt="Shoes" />
 
       <div className="icons absolute bottom-0 right-0 flex gap-4 z-50 p-2">
-        <HiDownload className='text-white p-1 rounded cursor-pointer hover:scale-101' size={33}/>
-        <FaHeart className='text-white p-1 rounded cursor-pointer hover:scale-101' size={33}/>
+        <HiDownload className='text-white p-1 rounded cursor-pointer hover:scale-101 z-100' size={33}/>
+        <FaHeart className='text-red-500 p-1 rounded cursor-pointer hover:scale-101 z-100' onClick={() => collectUrl(props.src, currUser.id)} size={33}/>
       </div>
   </figure>
 {/* </div> */}

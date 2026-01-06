@@ -9,36 +9,45 @@ interface SearchState {
   imgQuery: string;
   gifQuery: string;
   activeTab: MediaType;
-  results: Item[];
+  imgData: Item[];
+  gifData: Item[];
   loading: boolean;
   error: string | null;
   collectedUrl: string;
   currUser: object;
+  gifValue: string;
+  imgValue: string;
 }
 
 const initialState: SearchState = {
   imgQuery: '',
   gifQuery: '',
   activeTab: 'Images',
-  results: [],
-  loading: true,
+  imgData: [],
+  gifData: [],
+  loading: false,
   error: null,
   collectedUrl: '',
   currUser: {},
+  gifValue: 'abc',
+  imgValue: 'abc'
 };
 
 const searchSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    setQuery(state, action: PayloadAction<string>) {
-      state.query = action.payload;
-    },
     setActiveTab(state, action: PayloadAction<MediaType>) {
       state.activeTab = action.payload;
     },
-    setResults(state, action: PayloadAction<Item[]>) {
-      state.results = [...state.results, ...action.payload];
+    setImgData(state, action: PayloadAction<Item[]>) {
+      state.imgData = [...state.imgData, ...action.payload];
+    },
+    setGifData(state, action: PayloadAction<Item[]>) {
+      state.gifData = [...state.gifData, ...action.payload];
+    },
+    setEmptyGifData(state, action: PayloadAction<Item[]>) {
+      state.gifData = action.payload;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
@@ -48,8 +57,8 @@ const searchSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-    setEmptyResults(state, action: PayloadAction<Item[]>) {
-      state.results = action.payload;
+    setEmptyImgData(state, action: PayloadAction<Item[]>) {
+      state.imgData = action.payload;
     },
     setCollectedUrl(state, action: PayloadAction<string>){
       state.collectedUrl = action.payload;
@@ -62,9 +71,15 @@ const searchSlice = createSlice({
     },
     setGifQuery(state, action: PayloadAction<string>){
       state.gifQuery = action.payload;
+    },
+    setGifValue(state, action: PayloadAction<string>){
+      state.gifValue = action.payload;
+    },
+    setImgValue(state, action: PayloadAction<string>){
+      state.imgValue = action.payload;
     }
   },
 });
 
-export const { setQuery, setActiveTab, setResults, setLoading, setError, setEmptyResults, setCollectedUrl, setCurrUser, setImgQuery, setGifQuery } = searchSlice.actions;
+export const { setActiveTab, setImgData, setLoading, setError, setEmptyImgData, setCollectedUrl, setCurrUser, setImgQuery, setGifQuery, setGifData, setEmptyGifData, setGifValue, setImgValue } = searchSlice.actions;
 export default searchSlice.reducer;

@@ -1,19 +1,15 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import {  useEffect } from 'react'
 import { getMediaApi } from '../../mediaApi/getApi'
-import { setLoading, setResults, setEmptyResults, setCollectedUrl } from '../../app/features/searchSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { setLoading, setCollectedUrl, setImgData, setImgValue, setEmptyImgData } from '../../app/features/searchSlice'
+import {  useSelector } from 'react-redux'
 import { useAppDispatch } from '../../app/hooks'
-import { getGifApi } from '../../mediaApi/getApi'
-import type { Api } from '@reduxjs/toolkit/query'
 import { Link } from 'react-router-dom'
 import {Outlet} from 'react-router-dom'
-import type { Item, ApiResponse, ApiGifResponse, ApiItem, ApiGifItem } from '../home'
+import type { ApiResponse, Item, ApiItem} from '../home'
 import Card from '../card'
 
 const ImgData = () => {
-
-    const [imgData, setImgData] = useState<Item[]>([]);
     
         const imgQuery = useSelector((state: { search: { imgQuery: string } }) => state.search.imgQuery);
       const searchData = imgQuery;
@@ -24,7 +20,9 @@ const ImgData = () => {
       const results = useSelector((state: { search: { results: Item[] } }) => state.search.results);
       const loading = useSelector((state: { search: { loading: boolean } }) => state.search.loading);
       const activeTab = useSelector((state: { search: { activeTab: string } }) => state.search.activeTab);   
-    
+      const imgData = useSelector((state: { search: { imgData: Item[] } }) => state.search.imgData);
+      const imgValue = useSelector((state: { search: { imgValue: string } }) => state.search.imgValue);  
+
       const fetchImgData: () => Promise<Item[]> = async  () => {
             try {
             dispatch(setLoading(true));
@@ -36,11 +34,10 @@ const ImgData = () => {
                 title: item.alt_description,
                 url: item.urls.regular })
             );
-            dispatch(setResults(data));
             console.log(res);
             console.log(results);
             dispatch(setLoading(false));
-            setImgData((prevData) => [...prevData, ...data]);
+            dispatch(setImgData(data));
             return imgData;
             // console.log('Fetched data:', res.results);
             
@@ -51,11 +48,13 @@ const ImgData = () => {
         };
 
         useEffect(() => {
+          if(imgQuery == imgValue) return;
+
+          dispatch(setEmptyImgData([]));
+          dispatch(setImgValue(imgQuery));
             console.log('Fetching data from Unsplash API...');
              if(activeTab === 'Images') {
-            setImgData([]);
             fetchImgData();
-            dispatch(setEmptyResults([])); // Clear previous results when query changes
             dispatch(setLoading(false));
              }
           }, [imgQuery]);

@@ -1,20 +1,11 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
 
 import Topbar from './topbar'
-import Card from './card'
-import { getMediaApi } from '../mediaApi/getApi'
-import { setLoading, setResults, setEmptyResults, setCollectedUrl } from '../app/features/searchSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { useAppDispatch } from '../app/hooks'
-import { getGifApi } from '../mediaApi/getApi'
-import type { Api } from '@reduxjs/toolkit/query'
-import { Link } from 'react-router-dom'
-import {Outlet} from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import ImgData from './Data/imgData'
 import GifData from './Data/gifData'
 
-  type ApiItem = {
+export type ApiItem = {
     id: string;
     urls: {
       regular: string;
@@ -27,14 +18,14 @@ export type ApiResponse = {
     results: ApiItem[];
   }
 
-  type Item = {
+ export type Item = {
   id: string;
   type: string;
   title: string;
   url: string;
 };
 
-type ApiGifItem = {
+export type ApiGifItem = {
   id: string;
   title: string;
   media_formats: {
@@ -63,7 +54,6 @@ const Home = () => {
   // const results = useSelector((state: { search: { results: Item[] } }) => state.search.results);
   // const loading = useSelector((state: { search: { loading: boolean } }) => state.search.loading);
   const activeTab = useSelector((state: { search: { activeTab: string } }) => state.search.activeTab);   
-
   // const fetchImgData: () => Promise<Item[]> = async  () => {
   //       try {
   //       dispatch(setLoading(true));
@@ -137,7 +127,9 @@ const Home = () => {
     <>
     <main className='min-h-[100vh] w-full'>
       <Topbar />
-      <Outlet/>
+      {
+        activeTab === 'Images' ? <ImgData /> : <GifData/>
+      }
       {/* <div className="body my-2 px-10 py-10 grid grid-cols-3 gap-4 gap-y-14 z-0">
 
      {activeTab === 'Images' ? imgData.map((item) => (

@@ -8,6 +8,8 @@ import {Link} from 'react-router-dom'
 const View = () => {
 
   const collectedUrl = useSelector((state: {search: {collectedUrl: string}}) => state.search.collectedUrl);
+  
+  const activeTab = useSelector((state: {search: {activeTab: string}}) => state.search.activeTab);
 
   useEffect(() => {
     console.log("Collected URL in View component:", collectedUrl);

@@ -7,6 +7,7 @@ import View from './components/view.tsx'
 import {useAppSelector as useSelector} from './app/hooks.ts'
 import GifData from './components/Data/gifData'
 import ImgData from './components/Data/imgData'
+import RouteProtection from '../ProtectedRoute/RouteProtection.tsx'
 
 
 function App() {
@@ -16,12 +17,12 @@ function App() {
   return (
     <>
      <Routes>
-      <Route path="/" element={ <Home/> }>
-      <Route path={`/Images`} element={<ImgData/>}>
+      <Route path="/" element={ <RouteProtection><Home/></RouteProtection> }>
+      {/* <Route path={`/Images`} element={<ImgData/>}> */}
       {/* <Route path="/fullImage" element={<View/>}/> */}
-      </Route>
-      <Route path="/GIFs" element={<GifData/>}></Route>
-      <Route path="/fullImage" element={<View/>}/> 
+      {/* </Route>
+      <Route path="/GIFs" element={<GifData/>}></Route> */}
+      <Route path="/fullImage" element={<RouteProtection><View/></RouteProtection>}/> 
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path="/signup" element={<Signup/>}/>

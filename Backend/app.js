@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import User from './src/models/user.model.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { protector } from './src/middleware/auth.protector.js';
+import Cart from './src/models/cart.model.js';
 
 dotenv.config();
 
@@ -84,14 +86,42 @@ app.post('/login', async (req, res) => {
     if (!user | !isMatch | !isVerified) {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
-    const currUser = user._id;
-    console.log(currUser);
 
-    return res.status(200).json({ message: 'Login successful', token, currUser: {username: user.username, _id: user._id} });
+    return res.status(200).json({ message: 'Login successful', token, currUser: req.currUser });
 } catch (error) {
     return res.status(500).json({ message: 'Server error' });
 }
 });
+
+app.get('/collected', protector, async (req, res) => {
+    const {url, id} = req.body;
+    try {
+        const cart = new Cart({ userId: id, url: url });
+        cart.save();
+        const user = await User.findById(id);
+        user.urls.push(cart._id);
+        await user.save();
+        return res.status(200).json({ message: 'URL added to collection', cart });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+app.get('/uncollected', protector, async (req, res) => {
+    const {url, id} = req.body;
+    try {
+        const cart = await Cart.findOneAndDelete({ userId: id, url: url });
+        const user = await User.findById(id);
+        user.urls.pull(cart._id);
+        await user.save();
+        return res.status(200).json({ message: 'URL removed from collection', cart });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

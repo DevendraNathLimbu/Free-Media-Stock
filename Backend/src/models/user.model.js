@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    urls: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cart' }],
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

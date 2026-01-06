@@ -1,25 +1,25 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
-import { getMediaApi } from '../../mediaApi/getApi'
-import { setLoading, setResults, setEmptyResults, setCollectedUrl } from '../../app/features/searchSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { setLoading, setCollectedUrl, setGifData, setGifValue, setEmptyGifData } from '../../app/features/searchSlice'
+import { useSelector } from 'react-redux'
 import { useAppDispatch } from '../../app/hooks'
 import { getGifApi } from '../../mediaApi/getApi'
-import type { Api } from '@reduxjs/toolkit/query'
 import { Link } from 'react-router-dom'
 import {Outlet} from 'react-router-dom'
-import type { Item, ApiResponse, ApiGifResponse, ApiItem, ApiGifItem } from '../home'
+import type { Item, ApiGifResponse, ApiGifItem } from '../home'
 import Card from '../card'
+import { collect } from '../../Authorization/Collect'
 
 const GifData = () => {
     
-      const [gifData, setGifData] = useState<Item[]>([]);
+    const gifQuery = useSelector((state: { search: { gifQuery: string } }) => state.search.gifQuery);
+    const gifValue = useSelector((state: { search: { gifValue: string } }) => state.search.gifValue);
     
-        const gifQuery = useSelector((state: { search: { gifQuery: string } }) => state.search.gifQuery);
     
       const dispatch = useAppDispatch();
       const loading = useSelector((state: { search: { loading: boolean } }) => state.search.loading);
-      const activeTab = useSelector((state: { search: { activeTab: string } }) => state.search.activeTab);   
+      const activeTab = useSelector((state: { search: { activeTab: string } }) => state.search.activeTab); 
+      const gifData = useSelector((state: { search: { gifData: Item[] } }) => state.search.gifData); 
     
       const fetchGifData: () => Promise<Item[]> = async () => {
         try{
@@ -34,8 +34,7 @@ const GifData = () => {
           })
          );
          dispatch(setLoading(false));
-         dispatch(setResults(data));
-         setGifData((prevData) => [...prevData, ...data]);
+         dispatch(setGifData(data));
          console.log('Fetched GIF data:', res);
          return gifData;
         }catch (error) {
@@ -43,12 +42,16 @@ const GifData = () => {
           return [];
         }
       };
+
     
       useEffect(() => {
+      if(gifQuery == gifValue) return; 
+        
+        dispatch(setEmptyGifData([]));
+        dispatch(setGifValue(gifQuery));
+        
           if(activeTab === 'GIFs') {
-          setGifData([]);
           fetchGifData();
-          dispatch(setEmptyResults([])); // Clear previous results when query changes
           dispatch(setLoading(false));
          }
       }, [gifQuery]);
