@@ -5,7 +5,7 @@ import { collectUrl } from '../Authorization/Collect';
 import { unCollectUrl } from '../Authorization/UnCollect';
 import { useAppDispatch as useDispatch, useAppSelector as useSelector } from '../app/hooks';
 import { api } from '../apiCall';
-import { setLikedImages } from '../app/features/searchSlice';
+import { setActiveTab, setLikedImages } from '../app/features/searchSlice';
 
 const Card = (props) => {
   const currUser = useSelector((state) => state.search.currUser);
@@ -32,6 +32,10 @@ const Card = (props) => {
   const fetchUnCollectUrl = async () => {
     try {
       unCollectUrl(props.src, id);
+      const index = likedImages.indexOf(props.src);
+      if (index > -1) {
+        likedImages.splice(index, 1);
+      }
       const res = await api.get('/collections');
       for(let i=0; i<res.data.carts.length; i++){
         if(res.data.carts[i].userId === currUser._id){
@@ -44,6 +48,23 @@ const Card = (props) => {
     }
   }
 
+  const downloadImage = async () => {
+  const response = await fetch(props.src);
+  const blob = await response.blob();
+
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `${props.src}`; // filename
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+};
+
+
   console.log(likedImages);
   return (
     <>
@@ -54,9 +75,11 @@ const Card = (props) => {
       alt="Shoes" />
 
       <div className="icons absolute bottom-0 right-0 flex gap-4 z-50 p-2">
-        <HiDownload className='text-white p-1 rounded cursor-pointer hover:scale-101 z-100' size={33}/>
+        
+        <HiDownload onClick={downloadImage} className='text-green-300 p-1 rounded cursor-pointer hover:scale-101 z-100' size={33}/>
+        
         {
-          likedImages.includes(props.src) ? <FaHeart onClick={() => fetchUnCollectUrl()} className='text-red-500 p-1 rounded cursor-pointer hover:scale-101 z-100' size={30}/>
+          likedImages.includes(props.src) ? <FaHeart onClick={() => fetchUnCollectUrl()} className={`text-red-500 p-1 rounded cursor-pointer hover:scale-101 z-100`} size={30}/>
           : <FaHeart onClick={() => 
           {
             if(!likedImages.includes(props.src)){
