@@ -25,6 +25,7 @@ interface SearchState {
   currUser: currUserType;
   gifValue: string;
   imgValue: string;
+  likedImages: string[];
 }
 
 const initialState: SearchState = {
@@ -38,7 +39,8 @@ const initialState: SearchState = {
   collectedUrl: '',
   currUser: { urls: [''], _id: '', username: '', createdAt: '', updatedAt: '' },
   gifValue: 'abc',
-  imgValue: 'abc'
+  imgValue: 'abc',
+  likedImages: []
 };
 
 const searchSlice = createSlice({
@@ -85,9 +87,12 @@ const searchSlice = createSlice({
     },
     setImgValue(state, action: PayloadAction<string>){
       state.imgValue = action.payload;
+    },
+    setLikedImages(state, action: PayloadAction<string[]>){
+      state.likedImages = [...state.likedImages, ...action.payload];
     }
   },
 });
 
-export const { setActiveTab, setImgData, setLoading, setError, setEmptyImgData, setCollectedUrl, setCurrUser, setImgQuery, setGifQuery, setGifData, setEmptyGifData, setGifValue, setImgValue } = searchSlice.actions;
+export const { setActiveTab, setImgData, setLoading, setError, setEmptyImgData, setCollectedUrl, setCurrUser, setImgQuery, setGifQuery, setGifData, setEmptyGifData, setGifValue, setImgValue, setLikedImages } = searchSlice.actions;
 export default searchSlice.reducer;

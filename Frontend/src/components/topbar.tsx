@@ -1,7 +1,7 @@
 import { setActiveTab, setCurrUser, type MediaType } from '../app/features/searchSlice.ts';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import React, { useState } from 'react';
-import { setImgQuery, setGifQuery } from '../app/features/searchSlice.ts';
+import { setImgQuery, setGifQuery, setLikedImages } from '../app/features/searchSlice.ts';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import {api} from '../apiCall'
@@ -36,11 +36,16 @@ const [collections, setCollections] = useState<Array<{url: string, _id: string,
     setSearch('');
   };
 
-  const fetchCollections = async () => {
+   const fetchCollections = async () => {
     try {
       dispatch(setActiveTab("collection"));
       const res = await api.get('/collections');
       setCollections(res.data.carts);
+      for(let i=0; i<res.data.carts.length; i++){
+        if(res.data.carts[i].userId === currUser._id){
+          dispatch(setLikedImages([res.data.carts[i].url]));
+        }
+      }
       console.log('Fetched collections:', res.data);
     } catch (error) {
       console.error('Error fetching collections:', error);
@@ -78,7 +83,9 @@ const [collections, setCollections] = useState<Array<{url: string, _id: string,
           <button onClick={fetchCollections} className='text-2xl bg-gray-600 text-[#eee] px-2 py-1 rounded cursor-pointer hover:bg-gray-900'>Collections</button>
         </div>
       </div>
-      <Collections results={collections} />
+     {
+      activeTab === 'collection' ? <Collections results={collections} /> : ''
+     }
     </>
   )
 }

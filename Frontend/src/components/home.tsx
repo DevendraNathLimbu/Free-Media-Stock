@@ -137,7 +137,7 @@ const Home = () => {
     <main className='min-h-[100vh] w-full'>
       <Topbar />
       {
-        activeTab === 'Images' ? <ImgData /> : <GifData/>
+        activeTab === 'collection' ? " ": activeTab === 'Images' ? <ImgData /> : <GifData />
       }
       {/* <div className="body my-2 px-10 py-10 grid grid-cols-3 gap-4 gap-y-14 z-0">
 
