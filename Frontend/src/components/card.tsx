@@ -56,7 +56,7 @@ const Card = (props) => {
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `${props.src}`; // filename
+  link.download = `${props.src.split('/').pop() + (activeTab == 'Images' ? '.png' : '.gif')}`; // filename
   document.body.appendChild(link);
   link.click();
 
@@ -69,7 +69,7 @@ const Card = (props) => {
   return (
     <>
     {/* <div className="card bg-base-100 w-96 shadow-sm"> */}
-  <figure className='relative overflow-hidden h-56 w-96 rounded-xs shadow-lg cursor-pointer hover:scale-102 transition-all duration-300 z-0'>
+  <figure className='relative overflow-hidden w-86 md:h-56 md:w-96 rounded-xs shadow-lg cursor-pointer hover:scale-102 transition-all duration-300 z-0'>
     <img
       src={props.src}
       alt="Shoes" />

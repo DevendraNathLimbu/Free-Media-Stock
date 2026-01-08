@@ -34,8 +34,7 @@ const GifData = () => {
          );
          dispatch(setLoading(false));
          dispatch(setGifData(data));
-         console.log('Fetched GIF data:', res);
-         return gifData;
+         return data;
         }catch (error) {
           console.error('Error fetching GIF data in App component:', error);
           return [];
@@ -56,13 +55,12 @@ const GifData = () => {
       }, [gifQuery]);
     
       const collectUrl = (url: string) => {
-        console.log(url);
         dispatch(setCollectedUrl(url));
       }
 
   return (
     <>
-    <div className="body my-2 px-10 py-10 grid grid-cols-3 gap-4 gap-y-14 z-0">
+    <div className="body mx-0 my-2 px-7 md:px-10 py-10 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-y-14 z-0">
 
      { gifData.map((item) => (
       <Link key={item.id} onClick={() => collectUrl(item.url)} to='/fullImage'>

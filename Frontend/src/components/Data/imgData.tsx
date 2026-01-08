@@ -34,11 +34,9 @@ const ImgData = () => {
                 title: item.alt_description,
                 url: item.urls.regular })
             );
-            console.log(res);
-            console.log(results);
             dispatch(setLoading(false));
             dispatch(setImgData(data));
-            return imgData;
+            return data;
             // console.log('Fetched data:', res.results);
             
           } catch (error) {
@@ -66,7 +64,7 @@ const ImgData = () => {
 
   return (
     <>
-    <div className="body my-2 px-10 py-10 grid grid-cols-3 gap-4 gap-y-14 z-0">
+    <div className="body mx-0 my-2 px-7 md:px-10 py-10 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-y-14 z-0">
 
      { imgData.map((item) => (
       <Link key={item.id} onClick={() => collectUrl(item.url)} to='/fullImage'>

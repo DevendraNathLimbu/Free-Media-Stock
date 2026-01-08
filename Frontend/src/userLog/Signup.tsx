@@ -19,20 +19,20 @@ const [username, setUsername] = useState<string>('');
          const res = await api.post('/signup', {username, password});
          localStorage.setItem('token', res.data.token);
          localStorage.setItem('currUser', JSON.stringify(res.data.currUser));
-         console.log(res);
          dispatch(setCurrUser(res.data.currUser));
-          console.log("Signup successful");
           navigate('/');
         }
         catch (error) {
+          setUsername('');
+          setPassword('');
           console.error("Signup failed", error);
         }
       }
 
   return (
     <>
-    <section className='h-screen w-screen flex justify-center items-center bg-gray-300'>
-     <form className='max-h-[350px] min-w-[400px] grid grid-cols-1 py-3 px-8 inset-shadow-lg shadow-lg bg-gray-50 rounded-xl' onSubmit={handleSubmit}>
+    <section className='h-[90vh] md:h-screen w-screen flex justify-center items-center bg-gray-300'>
+     <form className='min-h-[300px] min-w-[350px] md:min-h-[350px] md:min-w-[400px] grid grid-cols-1 py-3 px-8 inset-shadow-lg shadow-lg bg-gray-50 rounded-xl' onSubmit={handleSubmit}>
         <h1 className='text-3xl text-center text-gray-800 font-bold'>SignUp</h1>
         <div className='grid grid-cols-1 mb-4'>
             <label htmlFor="username" className='text-xl text-gray-800'>Username</label>

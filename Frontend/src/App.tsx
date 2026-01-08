@@ -12,17 +12,15 @@ import RouteProtection from '../ProtectedRoute/RouteProtection.tsx'
 
 function App() {
 
-   const activeTab = useSelector((state: {search: {query: activeTab<string>}}) => {state.search.activeTab});
-
   return (
     <>
      <Routes>
-      <Route path="/" element={ <RouteProtection><Home/></RouteProtection> }>
+      <Route path="/" element={<Home/> }>
       {/* <Route path={`/Images`} element={<ImgData/>}> */}
       {/* <Route path="/fullImage" element={<View/>}/> */}
       {/* </Route>
       <Route path="/GIFs" element={<GifData/>}></Route> */}
-      <Route path="/fullImage" element={<RouteProtection><View/></RouteProtection>}/> 
+      <Route path="/fullImage" element={<View/>}/> 
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path="/signup" element={<Signup/>}/>
