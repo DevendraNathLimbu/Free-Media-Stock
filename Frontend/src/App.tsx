@@ -15,12 +15,8 @@ function App() {
   return (
     <>
      <Routes>
-      <Route path="/" element={<Home/> }>
-      {/* <Route path={`/Images`} element={<ImgData/>}> */}
-      {/* <Route path="/fullImage" element={<View/>}/> */}
-      {/* </Route>
-      <Route path="/GIFs" element={<GifData/>}></Route> */}
-      <Route path="/fullImage" element={<View/>}/> 
+      <Route path="/" element={ <RouteProtection><Home/></RouteProtection> }>
+      <Route path="/fullImage" element={<RouteProtection><View/></RouteProtection>}/> 
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path="/signup" element={<Signup/>}/>
