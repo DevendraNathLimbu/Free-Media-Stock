@@ -15,7 +15,7 @@ function App() {
   return (
     <>
      <Routes>
-      <Route path="/" element={ <RouteProtection><Home/></RouteProtection> }>
+      <Route path="/" element={<Home/>}>
       <Route path="/fullImage" element={<RouteProtection><View/></RouteProtection>}/> 
       </Route>
       <Route path="/login" element={<Login/>}/>
