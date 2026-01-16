@@ -20,4 +20,13 @@ A web page where free images, videos, gifs are available. Just LogIn/SignUp with
   npm install
   npm run dev
   ```
-  
+  ## Run By Docker
+  Open terminal and docker application, set the terminal path to the project file directory.
+  ### Frontend
+  ```
+  docker build -t frontend .
+```
+### Backend
+```
+docker build -t backend .
+```
