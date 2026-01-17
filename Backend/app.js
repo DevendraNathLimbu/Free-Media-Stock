@@ -36,6 +36,18 @@ app.use(cors({
     credentials: true,
   }));
 
+  // Serve frontend
+app.use(
+  express.static(path.join(__dirname, "../frontend/dist"))
+);
+
+// React routing support
+app.get("*", (_, res) => {
+  res.sendFile(
+    path.join(__dirname, "../frontend/dist/index.html")
+  );
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
