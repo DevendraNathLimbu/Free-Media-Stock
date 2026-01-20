@@ -30,3 +30,5 @@ A web page where free images, videos, gifs are available. Just LogIn/SignUp with
 ```
 docker build -t backend .
 ```
+
+### Conclusion
