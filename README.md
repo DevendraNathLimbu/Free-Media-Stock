@@ -33,5 +33,3 @@ docker build -t backend .
 
 ### Conclusion
 This thing is built on purpose to practice Redux toolkit, the whole react app is based on redux state management.
-
-### Thank You For Visiting
